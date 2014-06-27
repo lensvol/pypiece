@@ -6,9 +6,8 @@ import subprocess
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-@click.option('--timeout', default=45, help="Set pip socket timeout.")
 @click.option('--retries', default=3, help="Set number of retries before giving up.")
-def piecemeal_install(req_file, timeout, retries, pip_opts):
+def piecemeal_install(req_file, retries, pip_opts):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
@@ -37,8 +36,7 @@ def piecemeal_install(req_file, timeout, retries, pip_opts):
                                show_eta=False,
                                fill_char=click.style('#', fg='green')) as packages:
             for package in packages:
-                cmd = ['pip', 'install', package,
-                       '--timeout', unicode(timeout)]
+                cmd = ['pip', 'install', package]
                 cmd.extend(pip_opts)
 
                 try:
