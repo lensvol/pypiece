@@ -6,7 +6,8 @@ import subprocess
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-def piecemeal_install(req_file, pip_opts):
+@click.option('--pip', default='pip')
+def piecemeal_install(req_file, pip, pip_opts):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
@@ -34,7 +35,7 @@ def piecemeal_install(req_file, pip_opts):
                                show_eta=False,
                                fill_char=click.style('#', fg='green')) as packages:
             for package in packages:
-                cmd = ['pip', 'install', package]
+                cmd = [pip, 'install', package]
                 cmd.extend(pip_opts)
 
                 try:
