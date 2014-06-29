@@ -6,15 +6,13 @@ import subprocess
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-@click.option('--retries', default=3, help="Set number of retries before giving up.")
-def piecemeal_install(req_file, retries, pip_opts):
+def piecemeal_install(req_file, pip_opts):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
 
     :param req_fn: File with Python packages to install.
     :param timeout: Socket timeout for pip.
-    :param retries: Times to retry installing package before giving up.
     '''
 
     def show_item(item):
