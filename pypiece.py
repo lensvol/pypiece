@@ -6,8 +6,9 @@ import subprocess
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-@click.option('-p/--pip', default='pip',  help='Specify pip binary to use (default: "pip")')
-def piecemeal_install(req_file, pip, pip_opts):
+@click.option('--retries', default=3, help='Number of repeated attempts to install package.')
+@click.option('--pip', default='pip', help='Specify pip binary to use (default: "pip").')
+def piecemeal_install(req_file, pip, pip_opts, retries):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
@@ -36,23 +37,27 @@ def piecemeal_install(req_file, pip, pip_opts):
             for package in packages:
                 cmd = [pip, 'install', package]
                 cmd.extend(pip_opts)
+                success = False
 
-                try:
-                    # Run 'pip' and capture its output for further analysis
-                    output = subprocess.check_output(cmd)
+                for attempt in xrange(1 + retries):
+                    try:
+                        # Run 'pip' and capture its output for further analysis
+                        output = subprocess.check_output(cmd)
+                        if output.startswith('Requirement already satisfied'):
+                            # It seems that requirement was already satisfied
+                            already_installed.append(package)
+                        elif 'Successfully installed' in output:
+                            # Requirement was installed successfully
+                            # FIXME: Triggers on reinstallation of dependent package
+                            # TODO: Record dependent packages
+                            success_packages.append(package)
+                        success = True
+                        break
+                    except subprocess.CalledProcessError as call_exc:
+                        # Something went wrong, note it and carry on
+                        pass
 
-                    if output.startswith('Requirement already satisfied'):
-                        # It seems that requirement was already satisfied
-                        already_installed.append(package)
-                    elif 'Successfully installed' in output:
-                        # Requirement was installed successfully
-                        # FIXME: Triggers on reinstallation of dependent package
-                        # TODO: Record dependent packages
-                        click.echo(output)
-                        success_packages.append(package)
-
-                except subprocess.CalledProcessError as call_exc:
-                    # Something went wrong, note it and carry on
+                if not success:
                     failed_packages.append(package)
 
     for title, color, affected in (
