@@ -27,8 +27,8 @@ def piecemeal_install(req_file, pip, pip_opts):
     with open(req_file, 'r') as fp:
         # Load up requirements and filter out comments
         lines = [l.strip() for l in fp.readlines() if not l.startswith('#')]
-        # Sort and normalize requirements list, skipping blank lines
-        lines = filter(lambda x: x, sorted(list(set(lines))))
+        # Normalize requirements list, skipping blank lines
+        lines = filter(lambda x: x, list(set(lines)))
 
         with click.progressbar(lines,
                                label="Processing packages",
