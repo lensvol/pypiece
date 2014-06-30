@@ -6,14 +6,11 @@ import subprocess
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-@click.option('--pip', default='pip')
+@click.option('-p/--pip', default='pip',  help='Specify pip binary to use (default: "pip")')
 def piecemeal_install(req_file, pip, pip_opts):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
-
-    :param req_fn: File with Python packages to install.
-    :param timeout: Socket timeout for pip.
     '''
 
     def show_item(item):
