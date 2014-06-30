@@ -21,6 +21,8 @@ def piecemeal_install(req_file, pip, pip_opts):
             return click.style(item, fg="blue")
 
     failed_packages = []
+    success_packages = []
+    already_installed = []
 
     with open(req_file, 'r') as fp:
         # Load up requirements and filter out comments
@@ -29,7 +31,7 @@ def piecemeal_install(req_file, pip, pip_opts):
         lines = filter(lambda x: x, sorted(list(set(lines))))
 
         with click.progressbar(lines,
-                               label="Installing packages",
+                               label="Processing packages",
                                bar_template="%(label)s [%(bar)s] %(info)s",
                                item_show_func=show_item,
                                show_eta=False,
@@ -40,13 +42,24 @@ def piecemeal_install(req_file, pip, pip_opts):
 
                 try:
                     output = subprocess.check_output(cmd)
+
+                    if output.startswith('Requirement already satisfied'):
+                        already_installed.append(package)
+                    elif 'Successfully installed' in output:
+                        click.echo(output)
+                        success_packages.append(package)
+
                 except subprocess.CalledProcessError as call_exc:
                     failed_packages.append(package)
 
-    if failed_packages:
-        click.echo()
-        click.echo(click.style('[Failed]', fg='red'))
-        click.echo('\n'.join(failed_packages))
+    for title, color, affected in (
+            ('Already installed', 'blue', already_installed),
+            ('Installed', 'green', success_packages),
+            ('Failed', 'red', failed_packages)):
+        if affected:
+            click.echo()
+            click.echo(click.style('[{0}]'.format(title), fg=color))
+            click.echo('\n'.join(affected))
 
 
 if __name__ == '__main__':
