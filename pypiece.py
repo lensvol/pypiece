@@ -41,15 +41,21 @@ def piecemeal_install(req_file, pip, pip_opts):
                 cmd.extend(pip_opts)
 
                 try:
+                    # Run 'pip' and capture its output for further analysis
                     output = subprocess.check_output(cmd)
 
                     if output.startswith('Requirement already satisfied'):
+                        # It seems that requirement was already satisfied
                         already_installed.append(package)
                     elif 'Successfully installed' in output:
+                        # Requirement was installed successfully
+                        # FIXME: Triggers on reinstallation of dependent package
+                        # TODO: Record dependent packages
                         click.echo(output)
                         success_packages.append(package)
 
                 except subprocess.CalledProcessError as call_exc:
+                    # Something went wrong, note it and carry on
                     failed_packages.append(package)
 
     for title, color, affected in (
