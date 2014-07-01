@@ -20,4 +20,9 @@ setup(
         "Topic :: Utilities",
         "License :: OSI Approved :: BSD License",
     ],
+    entry_points={
+        'console_scripts': [
+            'pypiece = pypiece.pypiece:piecemeal_install'
+        ]
+    }
 )
