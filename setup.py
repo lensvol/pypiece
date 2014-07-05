@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name = "pypiece",
-    version = "0.1.1",
+    version = "0.1.2",
     author = "Kirill Borisov",
     author_email = "lensvol@gmail.com",
     description = ("Wrapper around pip for flakey connections."),
