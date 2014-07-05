@@ -15,6 +15,7 @@ setup(
     url = "https://github.com/lensvol/pypiece",
     packages=['pypiece'],
     long_description=read('README.md'),
+    install_requires=["click>=2.4"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
