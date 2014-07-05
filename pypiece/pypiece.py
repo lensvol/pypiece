@@ -1,14 +1,25 @@
 # coding: utf-8
 
 import click
+import os
 import subprocess
+
+
+class VenvNotFoundError(Exception):
+    pass
+
+
+class PipNotFoundError(Exception):
+    pass
+
 
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
 @click.option('--retries', default=3, help='Number of repeated attempts to install package.')
 @click.option('--pip', default='pip', help='Specify pip binary to use (default: "pip").')
-def piecemeal_install(req_file, pip, pip_opts, retries):
+@click.option('--venv', help='virtualenv to install packages into.')
+def piecemeal_install(req_file, pip, pip_opts, retries, venv):
     u'''
     Install packages from provided requirements file piece by piece.
     If package installation fails, continue like nothing happened.
@@ -21,6 +32,20 @@ def piecemeal_install(req_file, pip, pip_opts, retries):
     failed_packages = []
     success_packages = []
     already_installed = []
+
+    if pip and venv:
+        raise ValueError("--pip and --venv options should not be specified at the same time!")
+
+    if venv:
+        workon_home = os.environ.get('WORKON_HOME', '')
+        if not workon_home:
+            raise VenvNotFoundError("virtualenv specified, but no WORKON_HOME "
+                             "environment valuable found!")
+
+        venv_pip = os.path.join(workon_home, venv, 'bin', 'pip')
+        if not os.path.exists(venv_pip):
+            raise PipNotFoundError("'{}' is not found!".format(venv_pip))
+        pip = venv_pip
 
     with open(req_file, 'r') as fp:
         # Load up requirements and filter out comments
