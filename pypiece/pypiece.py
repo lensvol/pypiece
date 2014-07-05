@@ -42,7 +42,7 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
     success_packages = []
     already_installed = []
 
-    if pip and venv:
+    if pip != 'pip' and venv:
         raise ValueError("--pip and --venv options should not be specified at the same time!")
 
     if venv:
