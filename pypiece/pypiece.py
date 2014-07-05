@@ -13,6 +13,12 @@ class PipNotFoundError(Exception):
     pass
 
 
+def fatal(msg, **kwargs):
+    txt = msg.format(**kwargs)
+    click.echo(click.style(txt, fg="red"))
+    exit(-1)
+
+
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
@@ -40,6 +46,8 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
         raise ValueError("--pip and --venv options should not be specified at the same time!")
 
     if venv:
+        # If virtualenv name specified, try to get root directory from environment
+        # (only works with virtualenvwrapper for the moment).
         workon_home = os.environ.get('WORKON_HOME', '')
         if not workon_home:
             raise VenvNotFoundError("virtualenv specified, but no WORKON_HOME "
@@ -99,4 +107,7 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
 
 
 if __name__ == '__main__':
-    piecemeal_install()
+    try:
+        piecemeal_install()
+    except Exception as exc:
+        fatal(unicode(exc))
