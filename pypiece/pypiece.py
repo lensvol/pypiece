@@ -16,9 +16,12 @@ class PipNotFoundError(Exception):
 @click.command()
 @click.argument('req_file')
 @click.argument('pip_opts', nargs=-1)
-@click.option('--retries', default=3, help='Number of repeated attempts to install package.')
-@click.option('--pip', default='pip', help='Specify pip binary to use (default: "pip").')
-@click.option('--venv', help='virtualenv to install packages into.')
+@click.option('--retries', '-r', default=3, show_default=True,
+              help='Number of repeated attempts to install package.')
+@click.option('--pip', '-p', default='pip', show_default=True,
+              help='Specify pip binary to use.')
+@click.option('--venv', '-v', default=None, show_default=True,
+              help='virtualenv to install packages into.')
 def piecemeal_install(req_file, pip, pip_opts, retries, venv):
     u'''
     Install packages from provided requirements file piece by piece.
