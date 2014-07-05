@@ -55,7 +55,7 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
 
         venv_pip = os.path.join(workon_home, venv, 'bin', 'pip')
         if not os.path.exists(venv_pip):
-            raise PipNotFoundError("'{}' is not found!".format(venv_pip))
+            raise PipNotFoundError("Virtualenv '{}' is not found!".format(venv))
         pip = venv_pip
 
     with open(req_file, 'r') as fp:
