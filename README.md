@@ -3,7 +3,7 @@ pypiece
 
 Wrapper around pip for use with flaky connections.
 
-Basic idea behind it is that default behaviour of `pip` to download all packages at one
+Basic idea behind it is that default behaviour of `pip` to download all packages at once
 and compile them can get pretty frustrating in situations, where single error in 
 downloading or installing a package can result in repeating whole process all
 over again.
