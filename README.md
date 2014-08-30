@@ -15,9 +15,7 @@ outputs list of successfully installed packages and ones that failed.
 Usage
 -----
 
-<pre>
-pypiece < requirements file > < -- PIP options >
-</pre>
+    pypiece < requirements file > < -- PIP options >
 
 Available options:
   
@@ -30,11 +28,13 @@ pip arguments
 If `--` is found in command line, then all arguments
 after it will be passed unchanged to `pip` executable on every call.
 
-For example, 
-<pre>pypiece requirements.txt -- -i https://my.pypi.repo</pre>
+For example: 
 
-is equivalent to 
-<pre>pip install -r requirements.txt -i https://my.pypi.repo</pre>
+    pypiece requirements.txt -- -i https://my.pypi.repo
+
+Last line is equivalent to: 
+
+    pip install -r requirements.txt -i https://my.pypi.repo
 
 Examples
 --------
