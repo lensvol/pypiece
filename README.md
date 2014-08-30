@@ -39,13 +39,22 @@ is equivalent to
 Examples
 --------
 
-<pre>pypiece requirements.txt</pre>
-We will try to install every package found in _requirements.txt_ one by one, retrying 
-3 times if necessary.
+Try to install every package found in _requirements.txt_ one by one:
 
-<pre>pypiece --venv test requirements.txt</pre>
-`pypiece` will try to find virtualenv _test_ in directory specified by _WORKON_HOME_ 
-variable. If successful, it will use `pip` from this virtualenv.
+    pypiece requirements.txt
 
-<pre>pypiece --pip my_env/bin/pip requirements.txt</pre>
-`pypiece` will try to use provided `pip` binary for installation purposes.
+Install requirements using `pip` from virtualenv _test_:
+
+    pypiece --venv test requirements.txt
+
+Install requirements using specified `pip` binary:
+
+    pypiece --pip my_env/bin/pip requirements.txt
+
+Feedback
+--------
+
+Send your bug reports and suggestions to [lensvol@gmail.com][1]
+
+
+  [1]: mailto:lensvol@gmail.com
