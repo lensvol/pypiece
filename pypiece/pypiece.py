@@ -51,7 +51,7 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
         workon_home = os.environ.get('WORKON_HOME', '')
         if not workon_home:
             raise VenvNotFoundError("virtualenv specified, but no WORKON_HOME "
-                             "environment valuable found!")
+                                    "environment valuable found!")
 
         venv_pip = os.path.join(workon_home, venv, 'bin', 'pip')
         if not os.path.exists(venv_pip):
@@ -89,7 +89,7 @@ def piecemeal_install(req_file, pip, pip_opts, retries, venv):
                             success_packages.append(package)
                         success = True
                         break
-                    except subprocess.CalledProcessError as call_exc:
+                    except subprocess.CalledProcessError:
                         # Something went wrong, note it and carry on
                         pass
 
